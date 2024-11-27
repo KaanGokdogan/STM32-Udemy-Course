@@ -24,11 +24,11 @@
 /*
  * AHBx and APXx Bus Peripheral base addresses
  */
-#define PERIPH_BASE					0x40000000U
-#define APB1PERIPH_BASE				PERIPH_BASE
-#define APB2PERIPH_BASE				0x40010000U
-#define AHB1PERIPH_BASE				0x40020000U
-#define AHB2PERIPH_BASE				0x50000000U
+#define PERIPH_BASEADDR					0x40000000U
+#define APB1PERIPH_BASEADDR			PERIPH_BASE
+#define APB2PERIPH_BASEADDR			0x40010000U
+#define AHB1PERIPH_BASEADDR				0x40020000U
+#define AHB2PERIPH_BASEADDR			0x50000000U
 
 /*
  * Base addresses of peripherals which are hanging on AHB1 Bus
@@ -232,6 +232,15 @@ typedef struct{
 #define SYSCFG1_PCLK_DI() 	(RCC->APB2ENR &= ~(1 << 12))
 
 
+/*
+ * Some generic macros
+ */
+#define ENABLE 				1
+#define DISABLE 			0
+#define SET					ENABLE
+#define RESET				DISABLE
+#define GPIO_PIN_SET		SET
+#define GPIO_PIN_RESET		RESET
 
 
 
