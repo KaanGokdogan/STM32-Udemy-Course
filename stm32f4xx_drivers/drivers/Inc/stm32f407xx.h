@@ -16,13 +16,13 @@
  * Base addresses of Flash and SRAM memories
  */
 #define FLASH_BASEADDR				0x08000000U
-#define	SRAM1_BASEADDR				0x20000000U // 112 Kb -> 114,688 Byte -> 1C00
+#define	SRAM1_BASEADDR				0x20000000U // 112 KB -> 114,688 Byte -> 1C00
 #define	SRAM2_BASEADDR				0x20001C00U
 #define ROM_BASEADDR				0x1FFF0000U
 #define SRAM						SRAM1_BASEADDR
 
 /*
- * AHBx and APXx Bus Peripheral base adresses
+ * AHBx and APXx Bus Peripheral base addresses
  */
 #define PERIPH_BASE					0x40000000U
 #define APB1PERIPH_BASE				PERIPH_BASE
@@ -115,6 +115,12 @@ typedef struct{
 	__vo uint32_t PLLI2SCFGR;				// Address offset:0x84		PLLI2S configuration register
 
 }RCC_RegDef_t;
+
+
+
+
+
+
 /*
  * Peripheral definitions ( Peripheral base addresses type casted to xxx_RegDef_t
  */
@@ -178,6 +184,7 @@ typedef struct{
 #define SYSCFG1_PCLK_EN() 	(RCC->APB2ENR |= (1 << 12))
 
 
+
 /*
  * Clock Disable Macros for GPIOx peripherals
  */
@@ -196,6 +203,7 @@ typedef struct{
 #define I2C1_PCLK_DI() 	(RCC->APB1ENR &= ~(1 << 21))
 #define I2C2_PCLK_DI() 	(RCC->APB1ENR &= ~(1 << 22))
 #define I2C3_PCLK_DI() 	(RCC->APB1ENR &= ~(1 << 23))
+
 /*
  * Clock Disable Macros for SPIx peripherals
  */
@@ -203,6 +211,7 @@ typedef struct{
 #define SPI2_PCLK_DI() 	(RCC->APB1ENR &= ~(1 << 13))
 #define SPI3_PCLK_DI() 	(RCC->APB1ENR &= ~(1 << 14))
 #define SPI4_PCLK_DI() 	(RCC->APB2ENR &= ~(1 << 15))
+
 /*
  * Clock Disable Macros for USARTx peripherals
  */
@@ -210,15 +219,17 @@ typedef struct{
 #define USART2_PCLK_DI() 	(RCC->APB2ENR &= ~(1 << 17))
 #define USART3_PCLK_DI() 	(RCC->APB2ENR &= ~(1 << 18))
 #define USART6_PCLK_DI() 	(RCC->APB2ENR &= ~(1 << 5))
+
 /*
  * Clock Disable Macros for UARTx peripherals
  */
 #define UART4_PCLK_DI() 	(RCC->APB1ENR &= ~(1 << 19))
 #define UART5_PCLK_DI() 	(RCC->APB1ENR &= ~(1 << 20))
+
 /*
  * Clock Disable Macros for SYSCFGx peripherals
  */
-
+#define SYSCFG1_PCLK_DI() 	(RCC->APB2ENR &= ~(1 << 12))
 
 
 
