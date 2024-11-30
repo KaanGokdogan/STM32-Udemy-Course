@@ -9,6 +9,8 @@
 #define INC_STM32F407XX_GPIO_DRIVER_H_
 
 #include "stm32f407xx.h"
+
+
 /*
  * This is a Configuration structure for a GPIO pin
  */
@@ -21,6 +23,8 @@ typedef struct
 	uint8_t GPIO_PinOPType;				// @GPIO_PIN_OUTPUTS
 	uint8_t GPIO_PinAltFuncMode;
 }GPIO_PinConfig_t;
+
+
 /*
  * This is a Handle structure for a GPIO pin
  */
@@ -113,7 +117,8 @@ void GPIO_ToggleOutputPin(GPIO_RegDef_t *pGPIOx, uint8_t PinNumber);
 /*
  * IRQ Configuration and ISR handling
  */
-void GPIO_IRQConfig(uint8_t IRQNumber, uint8_t IRQPriortyi, uint8_t EnorDi);
+void GPIO_IRQInterruptConfig(uint8_t IRQNumber,  uint8_t EnorDi);
+void GPIO_IRQPriorityConfig(uint8_t IRQNumber, uint8_t IRQPriorty);
 void GPIO_IRQHandling(uint8_t PinNumber);
 
 

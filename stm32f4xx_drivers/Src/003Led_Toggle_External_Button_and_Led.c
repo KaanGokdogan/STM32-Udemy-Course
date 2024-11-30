@@ -22,7 +22,7 @@ int main()
 
 	// This is led configuration
 	gpioLed.pGPIOx = GPIOA;
-	gpioLed.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_14;
+	gpioLed.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_8;
 	gpioLed.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_OUT;
 	gpioLed.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_FAST;
 	gpioLed.GPIO_PinConfig.GPIO_PinOPType = GPIO_OP_TYPE_PP; // OD olursa led yanmıyor ama Pull up yaparsan OD deyken çok az bir voltaj geçtiği için led az yanıyor.
@@ -48,7 +48,7 @@ int main()
 		if(GPIO_ReadFromInputPin(GPIOB, GPIO_PIN_NO_12) == BTN_PRESSED)
 		{
 			delay();
-			GPIO_ToggleOutputPin(GPIOA, GPIO_PIN_NO_14);
+			GPIO_ToggleOutputPin(GPIOA, GPIO_PIN_NO_8);
 		}
 
 	}
