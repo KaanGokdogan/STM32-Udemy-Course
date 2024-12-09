@@ -90,6 +90,7 @@
  */
 #define EXTI_BASEADDR				(APB2PERIPH_BASEADDR + 0x3C00)
 #define SPI1_BASEADDR				(APB2PERIPH_BASEADDR + 0x3000)
+#define SPI4_BASEADDR				(APB2PERIPH_BASEADDR + 0x3400)
 #define SYSCFG_BASEADDR				(APB2PERIPH_BASEADDR + 0x3800)
 #define USART1_BASEADDR				(APB2PERIPH_BASEADDR + 0x1000)
 #define USART6_BASEADDR				(APB2PERIPH_BASEADDR + 0x1400)
@@ -161,8 +162,8 @@ typedef struct
 {
 	__vo uint32_t IMR;					// Address offset: 0x00		Interrupt mask register
 	__vo uint32_t EMR;					// Address offset: 0x04		Event mask register
-	__vo uint32_t RTSR;				// Address offset: 0x08		Rising trigger selection register
-	__vo uint32_t FTSR;				// Address offset: 0x0C		Falling trigger selection register
+	__vo uint32_t RTSR;					// Address offset: 0x08		Rising trigger selection register
+	__vo uint32_t FTSR;					// Address offset: 0x0C		Falling trigger selection register
 	__vo uint32_t SWIER;				// Address offset: 0x10		Software interrupt event register
 	__vo uint32_t PR;					// Address offset: 0x14		Pending register
 }EXTI_RegDef_t;
@@ -172,13 +173,28 @@ typedef struct
  */
 typedef struct
 {
-	__vo uint32_t MEMRMP;				// Address offset: 0x00		SYSCFG memory remap register
-	__vo uint32_t PMC;					// Address offset: 0x04		SYSCFG peripheral mode configuration register
+	__vo uint32_t MEMRMP;				// Address offset: 0x00					SYSCFG memory remap register
+	__vo uint32_t PMC;					// Address offset: 0x04					SYSCFG peripheral mode configuration register
 	__vo uint32_t EXTICR[4];			// Address offset: 0x08, 0C, 10, 14		SYSCFG external interrupt configuration register 1
 	uint32_t RESERVED[2];				// Address offset: 0x18, 1C
-	__vo uint32_t CMPCR;				// Address offset: 0x20		Compensation cell control register
+	__vo uint32_t CMPCR;				// Address offset: 0x20					Compensation cell control register
 }SYSCFG_RegDef_t;
 
+/*
+ * Peripheral register definition structure for SPI
+ */
+typedef struct
+{
+	__vo uint32_t CR1;					// Address offset: 0x00			SPI control register 1
+	__vo uint32_t CR2;					// Address offset: 0x04			SPI control register 2
+	__vo uint32_t SR;					// Address offset: 0x08			SPI status register
+	__vo uint32_t DR;					// Address offset: 0x0C			SPI data register
+	__vo uint32_t CRCPR;				// Address offset: 0x10			SPI CRC polynomial register
+	__vo uint32_t RXCRCR;				// Address offset: 0x14			SPI RX CRC register
+	__vo uint32_t TXCRCR;				// Address offset: 0x18			SPI TX CRC register
+	__vo uint32_t I2SCFGR;				// Address offset: 0x1C			SPI_I2S configuration register
+	__vo uint32_t I2SPR;				// Address offset: 0x20			SPI_I2S prescaler register
+}SPI_RegDef_t;
 
 
 
@@ -203,6 +219,12 @@ typedef struct
 #define EXTI				((EXTI_RegDef_t*) EXTI_BASEADDR)
 
 #define SYSCFG 				((SYSCFG_RegDef_t*) SYSCFG_BASEADDR)
+
+#define SPI1				((SPI_RegDef_t*) SPI1_BASEADDR)
+#define SPI2				((SPI_RegDef_t*) SPI2_BASEADDR)
+#define SPI3				((SPI_RegDef_t*) SPI3_BASEADDR)
+#define SPI4				((SPI_RegDef_t*) SPI4_BASEADDR)
+
 /*
  * Clock Enable Macros for GPIOx peripherals
  */
@@ -226,16 +248,16 @@ typedef struct
  * Clock Enable Macros for SPIx peripherals
  */
 #define SPI1_PCLK_EN() 	(RCC->APB2ENR |= (1 << 12))
-#define SPI2_PCLK_EN() 	(RCC->APB1ENR |= (1 << 13))
-#define SPI3_PCLK_EN() 	(RCC->APB1ENR |= (1 << 14))
-#define SPI4_PCLK_EN() 	(RCC->APB2ENR |= (1 << 15))
+#define SPI2_PCLK_EN() 	(RCC->APB1ENR |= (1 << 14))
+#define SPI3_PCLK_EN() 	(RCC->APB1ENR |= (1 << 15))
+#define SPI4_PCLK_EN() 	(RCC->APB2ENR |= (1 << 13))
 
 /*
  * Clock Enable Macros for USARTx peripherals
  */
 #define USART1_PCLK_EN() 	(RCC->APB2ENR |= (1 << 4))
-#define USART2_PCLK_EN() 	(RCC->APB2ENR |= (1 << 17))
-#define USART3_PCLK_EN() 	(RCC->APB2ENR |= (1 << 18))
+#define USART2_PCLK_EN() 	(RCC->APB1ENR |= (1 << 17))
+#define USART3_PCLK_EN() 	(RCC->APB1ENR |= (1 << 18))
 #define USART6_PCLK_EN() 	(RCC->APB2ENR |= (1 << 5))
 
 /*
@@ -274,16 +296,16 @@ typedef struct
  * Clock Disable Macros for SPIx peripherals
  */
 #define SPI1_PCLK_DI() 	(RCC->APB2ENR &= ~(1 << 12))
-#define SPI2_PCLK_DI() 	(RCC->APB1ENR &= ~(1 << 13))
-#define SPI3_PCLK_DI() 	(RCC->APB1ENR &= ~(1 << 14))
-#define SPI4_PCLK_DI() 	(RCC->APB2ENR &= ~(1 << 15))
+#define SPI2_PCLK_DI() 	(RCC->APB1ENR &= ~(1 << 14))
+#define SPI3_PCLK_DI() 	(RCC->APB1ENR &= ~(1 << 15))
+#define SPI4_PCLK_DI() 	(RCC->APB2ENR &= ~(1 << 13))
 
 /*
  * Clock Disable Macros for USARTx peripherals
  */
 #define USART1_PCLK_DI() 	(RCC->APB2ENR &= ~(1 << 4))
-#define USART2_PCLK_DI() 	(RCC->APB2ENR &= ~(1 << 17))
-#define USART3_PCLK_DI() 	(RCC->APB2ENR &= ~(1 << 18))
+#define USART2_PCLK_DI() 	(RCC->APB1ENR &= ~(1 << 17))
+#define USART3_PCLK_DI() 	(RCC->APB1ENR &= ~(1 << 18))
 #define USART6_PCLK_DI() 	(RCC->APB2ENR &= ~(1 << 5))
 
 /*
@@ -331,6 +353,26 @@ typedef struct
 #define IRQ_NO_EXTI4				10
 #define IRQ_NO_EXTI9_5				23
 #define IRQ_NO_EXTI15_10			40
+
+/*
+ * Macros for all the possible priority levels
+ */
+#define NVIC_IRQ_PRIO0				0
+#define NVIC_IRQ_PRIO1				1
+#define NVIC_IRQ_PRIO2				2
+#define NVIC_IRQ_PRIO3				3
+#define NVIC_IRQ_PRIO4				4
+#define NVIC_IRQ_PRIO5				5
+#define NVIC_IRQ_PRIO6				6
+#define NVIC_IRQ_PRIO7				7
+#define NVIC_IRQ_PRIO8				8
+#define NVIC_IRQ_PRIO9				9
+#define NVIC_IRQ_PRIO10				10
+#define NVIC_IRQ_PRIO11				11
+#define NVIC_IRQ_PRIO12				12
+#define NVIC_IRQ_PRIO13				13
+#define NVIC_IRQ_PRIO14				14
+#define NVIC_IRQ_PRIO15				15
 /*
  * Some generic macros
  */
@@ -347,5 +389,6 @@ typedef struct
 
 
 #include "stm32f407xx_gpio_driver.h"
+#include "stm32f407xx_driver_spi_driver.h"
 
 #endif /* INC_STM32F407XX_H_ */
