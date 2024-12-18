@@ -32,11 +32,11 @@ int main()
 	GPIO_Init(&gpioLed);
 
 	// This is button configuration
-	gpioLed.pGPIOx = GPIOA;
-	gpioLed.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_0;
-	gpioLed.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_IN;
-	gpioLed.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_FAST;
-	gpioLed.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_NO_PUPD;
+	gpioButton.pGPIOx = GPIOA;
+	gpioButton.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_0;
+	gpioButton.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_IN;
+	gpioButton.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_FAST;
+	gpioButton.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_NO_PUPD;
 
 	GPIO_PeriClockControl(GPIOA, ENABLE);
 	GPIO_Init(&gpioButton);
