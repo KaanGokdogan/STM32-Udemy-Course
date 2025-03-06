@@ -11,7 +11,7 @@
 #include "stm32f407xx.h"
 
 /*
- * This is a Configuration structure for a SPIx peripheral
+ * This is a Configuration structure for a SPIx peripherals
  */
 typedef struct
 {
