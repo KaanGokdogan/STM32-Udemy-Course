@@ -1,1 +1,1 @@
-# STM32-Udemy-Course
+# Mastering Microcontroller and Embedded Driver Development
