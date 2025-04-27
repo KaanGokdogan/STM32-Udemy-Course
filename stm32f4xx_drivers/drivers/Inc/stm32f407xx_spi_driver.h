@@ -5,10 +5,10 @@
  *      Author: MONSTER
  */
 
-#ifndef INC_STM32F407XX_DRIVER_SPI_DRIVER_H_
-#define INC_STM32F407XX_DRIVER_SPI_DRIVER_H_
+#ifndef INC_STM32F407XX_SPI_DRIVER_H_
+#define INC_STM32F407XX_SPI_DRIVER_H_
 
-#include "stm32f407xx.h"
+#include <stm32f407xx_i2c_driver.h>
 
 /*
  * This is a Configuration structure for a SPIx peripheral
@@ -158,4 +158,4 @@ void SPI_CloseReception(SPI_Handle_t *pHandle);
  */
 void SPI_ApplicationEventCallback(SPI_Handle_t *pHandle, uint8_t AppEvent);
 
-#endif /* INC_STM32F407XX_DRIVER_SPI_DRIVER_H_ */
+#endif /* INC_STM32F407XX_SPI_DRIVER_H_ */
