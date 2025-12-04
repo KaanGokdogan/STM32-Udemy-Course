@@ -35,8 +35,8 @@ typedef struct
 	uint8_t *pRxBuffer; 		// To store the app. Rx buffer address
 	uint8_t TxState;			// To store the Tx state
 	uint8_t RxState;			// To store the Rx state
-	uint8_t TxLength;				// To store the Tx Length
-	uint8_t RxLength;				// To store the Rx Length
+	uint8_t TxLength;			// To store the Tx Length
+	uint8_t RxLength;			// To store the Rx Length
 
 }SPI_Handle_t;
 

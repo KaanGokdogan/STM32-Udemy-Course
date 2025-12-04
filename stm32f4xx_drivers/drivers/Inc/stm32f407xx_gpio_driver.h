@@ -84,8 +84,8 @@ typedef struct
  * GPIO pin pull up and pull down configuration macros
  */
 #define GPIO_NO_PUPD			0
-#define GPIO_NO_PU				1
-#define GPIO_NO_PD				2
+#define GPIO_PIN_PU				1
+#define GPIO_PIN_PD				2
 
 
 
@@ -120,35 +120,6 @@ void GPIO_ToggleOutputPin(GPIO_RegDef_t *pGPIOx, uint8_t PinNumber);
 void GPIO_IRQInterruptConfig(uint8_t IRQNumber,  uint8_t EnorDi);
 void GPIO_IRQPriorityConfig(uint8_t IRQNumber, uint8_t IRQPriorty);
 void GPIO_IRQHandling(uint8_t PinNumber);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
