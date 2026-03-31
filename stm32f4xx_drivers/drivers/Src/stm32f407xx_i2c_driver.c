@@ -223,7 +223,7 @@ void I2C_DeInit(I2C_RegDef_t *pI2Cx)
  *
  * @Note			- none
  ************************************************************************/
-void I2C_MasterSendData (I2C_Handle_t *pI2CHandle, uint8_t *pTxBuffer, uint8_t Len, uint8_t SlaveAddr, uint8_t Sr)
+void I2C_MasterSendData(I2C_Handle_t *pI2CHandle, uint8_t *pTxBuffer, uint8_t Len, uint8_t SlaveAddr, uint8_t Sr)
 {
 
 	//1. Generate the START condition
@@ -280,7 +280,7 @@ void I2C_MasterSendData (I2C_Handle_t *pI2CHandle, uint8_t *pTxBuffer, uint8_t L
  * @Note			- none
  ************************************************************************/
 
-void I2C_MasterReceiveData (I2C_Handle_t *pI2CHandle, uint8_t *pRxBuffer, uint8_t Len, uint8_t SlaveAddr, uint8_t Sr)
+void I2C_MasterReceiveData(I2C_Handle_t *pI2CHandle, uint8_t *pRxBuffer, uint8_t Len, uint8_t SlaveAddr, uint8_t Sr)
 {
 	// 1. Generate the START condition
 	I2C_GenerateStartCondition(pI2CHandle->pI2Cx);
@@ -351,7 +351,19 @@ void I2C_MasterReceiveData (I2C_Handle_t *pI2CHandle, uint8_t *pRxBuffer, uint8_
 	}
 }
 
-
+/************************************************************************
+ * @fn				- I2C_ManageACKing
+ *
+ * @brief			-
+ *
+ * @param[in]		-
+ * @param[in]		-
+ * @param[in]		-
+ *
+ * @return			- none
+ *
+ * @Note			- none
+ ************************************************************************/
 void I2C_ManageACKing(I2C_RegDef_t *pI2Cx, uint8_t EnorDi)
 {
 	if(EnorDi == I2C_ACK_ENABLE)
@@ -364,6 +376,91 @@ void I2C_ManageACKing(I2C_RegDef_t *pI2Cx, uint8_t EnorDi)
 		// Disable the ACK
 		pI2Cx->CR1 &= ~(1 << I2C_CR1_ACK);
 	}
+}
+
+/************************************************************************
+ * @fn				- I2C_MasterSendDataIT
+ *
+ * @brief			-
+ *
+ * @param[in]		-
+ * @param[in]		-
+ * @param[in]		-
+ *
+ * @return			- none
+ *
+ * @Note			- Complete the below code . Also include the fn prototype in header file
+ ************************************************************************/
+uint8_t I2C_MasterSendDataIT(I2C_Handle_t *pI2CHandle,uint8_t *pTxBuffer, uint32_t Len,uint8_t SlaveAddr,uint8_t Sr)
+{
+	uint8_t busystate = pI2CHandle->TxRxState;
+
+	if( (busystate != I2C_BUSY_IN_TX) && (busystate != I2C_BUSY_IN_RX))
+	{
+		pI2CHandle->pTxBuffer = pTxBuffer;
+		pI2CHandle->TxLen = Len;
+		pI2CHandle->TxRxState = I2C_BUSY_IN_TX;
+		pI2CHandle->DevAddr = SlaveAddr;
+		pI2CHandle->Sr = Sr;
+
+		//Implement code to Generate START Condition
+		I2C_GenerateStartCondition(pI2CHandle->pI2Cx);
+
+		//Implement the code to enable ITBUFEN Control Bit
+		pI2CHandle->pI2Cx->CR2 |= ( 1 << I2C_CR2_ITBUFEN);
+
+		//Implement the code to enable ITEVTEN Control Bit
+		pI2CHandle->pI2Cx->CR2 |= ( 1 << I2C_CR2_ITEVTEN);
+
+		//Implement the code to enable ITERREN Control Bit
+		pI2CHandle->pI2Cx->CR2 |= ( 1 << I2C_CR2_ITERREN);
+
+	}
+
+	return busystate;
+}
+
+/************************************************************************
+ * @fn				- I2C_MasterReceiveDataIT
+ *
+ * @brief			-
+ *
+ * @param[in]		-
+ * @param[in]		-
+ * @param[in]		-
+ *
+ * @return			- none
+ *
+ * @Note			- Complete the below code . Also include the fn prototype in header file
+ ***************************************************** *******************/
+uint8_t I2C_MasterReceiveDataIT(I2C_Handle_t *pI2CHandle,uint8_t *pRxBuffer, uint32_t Len, uint8_t SlaveAddr,uint8_t Sr)
+{
+	uint8_t busystate = pI2CHandle->TxRxState;
+
+	if( (busystate != I2C_BUSY_IN_TX) && (busystate != I2C_BUSY_IN_RX))
+	{
+		pI2CHandle->pRxBuffer = pRxBuffer;
+		pI2CHandle->RxLen = Len;
+		pI2CHandle->TxRxState = I2C_BUSY_IN_RX;
+		pI2CHandle->RxSize = Len; //Rxsize is used in the ISR code to manage the data reception
+		pI2CHandle->DevAddr = SlaveAddr;
+		pI2CHandle->Sr = Sr;
+
+		//Implement code to Generate START Condition
+		I2C_GenerateStartCondition(pI2CHandle->pI2Cx);
+
+		//Implement the code to enable ITBUFEN Control Bit
+		pI2CHandle->pI2Cx->CR2 |= ( 1 << I2C_CR2_ITBUFEN);
+
+		//Implement the code to enable ITEVTEN Control Bit
+		pI2CHandle->pI2Cx->CR2 |= ( 1 << I2C_CR2_ITEVTEN);
+
+		//Implement the code to enable ITERREN Control Bit
+		pI2CHandle->pI2Cx->CR2 |= ( 1 << I2C_CR2_ITERREN);
+
+	}
+
+	return busystate;
 }
 
 
@@ -411,8 +508,82 @@ uint8_t I2C_GetFlagStatus(I2C_RegDef_t *pI2Cx, uint32_t FlagName)
 }
 
 
+/*
+ * IRQ Configuration and ISR handling
+ */
+/************************************************************************
+ * @fn				- SPI_IRQInterruptConfig
+ *
+ * @brief			-
+ *
+ * @param[in]		-
+ * @param[in]		-
+ * @param[in]		-
+ *
+ * @return			- none
+ *
+ * @Note			- none
+ ************************************************************************/
+void I2C_IRQInterruptConfig(uint8_t IRQNumber, uint8_t EnorDi)
+{
+	if(EnorDi == ENABLE)
+	{
+		if(IRQNumber <= 31)
+		{
+			//program ISER0 register
+			*NVIC_ISER0 |= ( 1 << IRQNumber );
 
+		}else if(IRQNumber > 31 && IRQNumber < 64 ) //32 to 63
+		{
+			//program ISER1 register
+			*NVIC_ISER1 |= ( 1 << (IRQNumber % 32) );
+		}
+		else if(IRQNumber >= 64 && IRQNumber < 96 )
+		{
+			//program ISER2 register //64 to 95
+			*NVIC_ISER3 |= ( 1 << (IRQNumber % 64) );
+		}
+	}else
+	{
+		if(IRQNumber <= 31)
+		{
+			//program ICER0 register
+			*NVIC_ICER0 |= ( 1 << IRQNumber );
+		}else if(IRQNumber > 31 && IRQNumber < 64 )
+		{
+			//program ICER1 register
+			*NVIC_ICER1 |= ( 1 << (IRQNumber % 32) );
+		}
+		else if(IRQNumber >= 6 && IRQNumber < 96 )
+		{
+			//program ICER2 register
+			*NVIC_ICER3 |= ( 1 << (IRQNumber % 64) );
+		}
+	}
+}
+/************************************************************************
+ * @fn				- SPI_IRQPriorityConfig
+ *
+ * @brief			-
+ *
+ * @param[in]		-
+ * @param[in]		-
+ * @param[in]		-
+ *
+ * @return			- none
+ *
+ * @Note			- none
+ ************************************************************************/
+void I2C_IRQPriorityConfig(uint8_t IRQNumber, uint32_t IRQPriority)
+{
+	//1. first lets find out the ipr register
+	uint8_t iprx = IRQNumber / 4;
+	uint8_t iprx_section  = IRQNumber %4 ;
 
+	uint8_t shift_amount = ( 8 * iprx_section) + ( 8 - NO_PR_BITS_IMPLEMENTED) ;
+
+	*(  NVIC_PR_BASE_ADDR + iprx ) |=  ( IRQPriority << shift_amount );
+}
 
 
 
